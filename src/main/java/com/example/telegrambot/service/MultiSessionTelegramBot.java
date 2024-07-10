@@ -21,6 +21,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -28,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class MultiSessionTelegramBot extends TelegramLongPollingBot {
 
     private String name;
@@ -84,6 +87,38 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
      */
     public String getMessageText() {
         return updateEvent.get().hasMessage() ? updateEvent.get().getMessage().getText() : "";
+    }
+
+    /**
+     * Метод возвращает никнэйм из последнего сообщения Telegram-чата
+     */
+    public String getUserFirstName() {
+
+        return updateEvent.get().hasCallbackQuery() ? updateEvent.get().getCallbackQuery().getFrom().getUserName() : "";
+    }
+
+    /**
+     * Метод возвращает никнэйм из последнего сообщения Telegram-чата
+     */
+    public String getUserLastName() {
+
+        return updateEvent.get().hasCallbackQuery() ? updateEvent.get().getCallbackQuery().getFrom().getLastName() : "";
+
+    }
+
+    /**
+     * Метод возвращает никнэйм из последнего сообщения Telegram-чата
+     */
+    public Long getUserId() {
+        return updateEvent.get().hasCallbackQuery() ? updateEvent.get().getCallbackQuery().getFrom().getId() : 0;
+
+    }
+
+    /**
+     * Метод возвращает текст из последнего сообщения Telegram-чата
+     */
+    public String getUserPhone() {
+        return updateEvent.get().hasMessage() ? updateEvent.get().getMessage().getContact().getPhoneNumber() : "";
     }
 
     public boolean isMessageCommand() {
