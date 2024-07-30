@@ -66,7 +66,7 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
     }
 
     public void onUpdateEventReceived(Update updateEvent) throws Exception {
-        // do nothing
+        log.info("Invoce this method");
     }
 
     /**
