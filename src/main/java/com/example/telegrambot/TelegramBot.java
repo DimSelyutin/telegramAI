@@ -27,7 +27,7 @@ public class TelegramBot extends MultiSessionTelegramBot {
         Long chatId = getCurrentChatId();
         String messageText = getMessageText();
         String button = getCallbackQueryButtonKey();
-
+        log.info(messageText);
         if (messageText.equals("/start")) {
             dialogMode = DialogMode.MAIN;
             List<String> buttons = new ArrayList<>();
