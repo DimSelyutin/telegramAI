@@ -324,22 +324,29 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
 
     public static String loadPrompt(String name) {
         try {
-            var is = ClassLoader.getSystemResourceAsStream("prompts/" + name + ".txt");
+            var resourcePath = "prompts/" + name + ".txt";
+            var is = ClassLoader.getSystemResourceAsStream(resourcePath);
+            if (is == null) {
+                throw new IOException("Resource not found: " + resourcePath);
+            }
             log.info("prompts-" + name);
             return new String(is.readAllBytes());
         } catch (IOException e) {
-            throw new RuntimeException("Can't load GPT prompt!");
+            throw new RuntimeException("Can't load GPT prompt!", e);
         }
     }
 
     public static String loadMessage(String name) {
         try {
+            var resourcePath = "messages/" + name + ".txt";
+            var is = ClassLoader.getSystemResourceAsStream(resourcePath);
+            if (is == null) {
+                throw new IOException("Resource not found: " + resourcePath);
+            }
             log.info("message --" + name);
-
-            var is = ClassLoader.getSystemResourceAsStream("messages/" + name + ".txt");
             return new String(is.readAllBytes());
         } catch (IOException e) {
-            throw new RuntimeException("Can't load message!");
+            throw new RuntimeException("Can't load message!", e);
         }
     }
 
