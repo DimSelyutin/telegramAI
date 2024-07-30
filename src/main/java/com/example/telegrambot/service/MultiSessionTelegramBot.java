@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -339,12 +341,12 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
     public static String loadMessage(String name) {
         try {
             var resourcePath = "messages/" + name + ".txt";
-            var is = ClassLoader.getSystemResourceAsStream(resourcePath);
-            if (is == null) {
+            log.info("message --" + resourcePath);
+            var path = Paths.get(resourcePath);
+            if (!Files.exists(path)) {
                 throw new IOException("Resource not found: " + resourcePath);
             }
-            log.info("message --" + name);
-            return new String(is.readAllBytes());
+            return new String(Files.readAllBytes(path));
         } catch (IOException e) {
             throw new RuntimeException("Can't load message!", e);
         }
