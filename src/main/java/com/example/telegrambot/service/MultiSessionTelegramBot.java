@@ -326,7 +326,7 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
 
     public static String loadPrompt(String name) {
         try {
-            var resourcePath = "prompts/" + name + ".txt";
+            var resourcePath = "src/main/resources/prompts/" + name + ".txt";
             var is = ClassLoader.getSystemResourceAsStream(resourcePath);
             if (is == null) {
                 throw new IOException("Resource not found: " + resourcePath);
@@ -340,7 +340,7 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
 
     public static String loadMessage(String name) {
         try {
-            var resourcePath = "messages/" + name + ".txt";
+            var resourcePath = "src/main/resources/messages/" + name + ".txt";
             log.info("message --" + resourcePath);
             var path = Paths.get(resourcePath);
             if (!Files.exists(path)) {
