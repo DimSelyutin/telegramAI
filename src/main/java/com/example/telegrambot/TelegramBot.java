@@ -40,7 +40,7 @@ public class TelegramBot extends MultiSessionTelegramBot {
             buttons.add("О вас");
             buttons.add("profile");
             // ф-я считывания из файла
-            String textMenu = loadMessage("main");
+            String textMenu = loadMessage("mainMessage");
             sendTextButtonsMessage(textMenu, buttons);
 
             return;
