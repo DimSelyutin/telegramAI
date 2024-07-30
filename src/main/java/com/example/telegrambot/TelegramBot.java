@@ -71,7 +71,7 @@ public class TelegramBot extends MultiSessionTelegramBot {
         if (dialogMode == dialogMode.GPT) {
             sendTypingNotification(chatId);
             log.info("messages: {}", chatGPTService.getMessageHistory());
-            String answer = chatGPTService.sendMessage(loadPrompt("posts"), messageText);
+            String answer = chatGPTService.sendMessage(loadPrompt("main"), messageText);
 
             sendTextMessage(answer);
         }
