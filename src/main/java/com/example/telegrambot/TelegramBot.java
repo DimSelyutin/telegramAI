@@ -2,19 +2,12 @@ package com.example.telegrambot;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 import com.example.telegrambot.constant.DialogMode;
 import com.example.telegrambot.entity.TelegramUser;
 import com.example.telegrambot.service.ChatGPTService;
 import com.example.telegrambot.service.MultiSessionTelegramBot;
 import java.util.*;
-import cn.hutool.system.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -76,10 +69,10 @@ public class TelegramBot extends MultiSessionTelegramBot {
         }
 
         if (dialogMode == dialogMode.GPT) {
-            log.info("Equals", dialogMode == dialogMode.GPT);
-            log.info("Equals", dialogMode.equals(dialogMode.GPT));
-            log.info("Equals", dialogMode == dialogMode.GPT);
-            String answer = chatGPTService.sendMessage("Ответь на вопрос:", messageText);
+            sendTypingNotification(chatId);
+            log.info("messages: {}", chatGPTService.getMessageHistory());
+            String answer = chatGPTService.sendMessage(loadPrompt("posts"), messageText);
+
             sendTextMessage(answer);
         }
 
