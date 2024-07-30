@@ -327,12 +327,11 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
     public static String loadPrompt(String name) {
         try {
             var resourcePath = "src/main/resources/prompts/" + name + ".txt";
-            var is = ClassLoader.getSystemResourceAsStream(resourcePath);
-            if (is == null) {
+            var path = Paths.get(resourcePath);
+            if (!Files.exists(path)) {
                 throw new IOException("Resource not found: " + resourcePath);
             }
-            log.info("prompts-" + name);
-            return new String(is.readAllBytes());
+            return new String(Files.readAllBytes(path));
         } catch (IOException e) {
             throw new RuntimeException("Can't load GPT prompt!", e);
         }
@@ -341,7 +340,6 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
     public static String loadMessage(String name) {
         try {
             var resourcePath = "src/main/resources/messages/" + name + ".txt";
-            log.info("message --" + resourcePath);
             var path = Paths.get(resourcePath);
             if (!Files.exists(path)) {
                 throw new IOException("Resource not found: " + resourcePath);
