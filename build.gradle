@@ -14,7 +14,14 @@ java {
 	sourceCompatibility = '17'
 
 }
-
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/resources'
+            include '**/*.txt'
+        }
+    }
+}
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor

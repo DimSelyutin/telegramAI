@@ -354,7 +354,7 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
         try {
             return ClassLoader.getSystemResourceAsStream("images/" + name + ".jpg");
         } catch (Exception e) {
-            throw new RuntimeException("Can't load photo!");
+            throw new RuntimeException("Can't load photo!", e);
         }
     }
 
