@@ -14,13 +14,7 @@ java {
 	sourceCompatibility = '17'
 
 }
-sourceSets {
-    main {
-        resources {
-            srcDir 'src/main/resources'
-        }
-    }
-}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
