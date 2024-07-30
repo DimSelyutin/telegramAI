@@ -19,6 +19,7 @@ sourceSets {
         resources {
             srcDir 'src/main/resources'
             include '**/*.txt'
+			duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
     }
 }
