@@ -20,6 +20,10 @@ public class ChatGPTService {
 
     private List<Message> messageHistory = new ArrayList<>(); // История переписки с ChatGPT - нужна для диалогов
 
+    public List<Message> getMessageHistory() {
+        return messageHistory;
+    }
+
     public ChatGPTService(String token) {
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("18.199.183.77", 49232));
         if (token.startsWith("gpt:")) {

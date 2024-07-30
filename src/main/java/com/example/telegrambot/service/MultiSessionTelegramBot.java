@@ -1,6 +1,7 @@
 package com.example.telegrambot.service;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.ActionType;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.GetUserProfilePhotos;
@@ -8,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.commands.DeleteMyCommands;
 import org.telegram.telegrambots.meta.api.methods.commands.GetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.menubutton.SetChatMenuButton;
+import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 // import org.telegram.telegrambots.meta.api.methods.reactions.SetMessageReaction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -252,6 +254,18 @@ public class MultiSessionTelegramBot extends TelegramLongPollingBot {
         var request = GetUserProfilePhotos.builder().userId(userId).offset(0).limit(100).build();
         UserProfilePhotos userProfilePhotos = executeTelegramApiMethod(request);
         return userProfilePhotos.getPhotos();
+    }
+
+    public void sendTypingNotification(Long chatId) {
+        SendChatAction chatAction = new SendChatAction();
+        chatAction.setChatId(chatId);
+        chatAction.setAction(ActionType.TYPING);
+        try {
+            execute(chatAction);
+        } catch (TelegramApiException e) {
+            // Обработка исключения
+            e.printStackTrace();
+        }
     }
 
     public List<List<PhotoSize>> getChatBotProfilePhotos() {

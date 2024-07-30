@@ -32,9 +32,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-implementation group: 'org.telegram', name: 'telegrambots', version: '6.5.0'
+	implementation group: 'org.telegram', name: 'telegrambots', version: '6.5.0'
 	// https://mavenlibs.com/maven/dependency/com.github.plexpt/toolkit
-implementation group: 'com.github.plexpt', name: 'chatgpt', version: '4.4.0'
+	implementation group: 'com.github.plexpt', name: 'chatgpt', version: '4.4.0'
 }
 
 tasks.named('test') {
