@@ -4,12 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import java.util.List;
 
 import com.example.telegrambot.TelegramBot;
 import com.example.telegrambot.command.Command;
 
 @Component
-public class ChatGptCommand implements Command {
+public class AboutBotCommand implements Command {
 
     @Autowired
     @Lazy
@@ -17,6 +18,9 @@ public class ChatGptCommand implements Command {
 
     @Override
     public void execute(Update update) {
-        telegramBot.sendTextButtonsMessage("Задайте ваш вопрос");
+        List<String> buttons = List.of("Назад", "back_to_main_menu");
+        String textMenu = telegramBot.loadMessage("aboutBotMessage");
+        telegramBot.sendTextButtonsMessage(textMenu, buttons);
+
     }
 }

@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import com.example.telegrambot.TelegramBot;
 import com.example.telegrambot.command.Command;
+import com.example.telegrambot.constant.DialogMode;
 import com.example.telegrambot.service.MultiSessionTelegramBot;
 
 import java.util.List;

@@ -20,48 +20,35 @@ public class TelegramBot extends MultiSessionTelegramBot {
     private CommandProvider commandProvider;
 
     @Autowired
-    private ChatGPTService chatGPTService;
-
-    private DialogMode dialogMode = DialogMode.MAIN;
-
-    public TelegramBot(@Value("${telegram.bot.name}") String name,
-            @Value("${telegram.bot.token}") String token) {
+    public TelegramBot(String name, String token) {
         super(name, token);
     }
 
     @Override
     public void onUpdateEventReceived(Update update) {
         String messageText = getMessageText();
+
+        if (messageText != "") {
+            log.info("Message: {}", messageText);
+            try {
+                commandProvider.executeCommand(messageText, update);
+            } catch (IllegalArgumentException e) {
+                log.error("Error executing command: ", e);
+                sendTextMessage("Unknown command: " + messageText);
+            }
+        }
+
+        // Также обработайте кнопки из callbackQuery.
         String button = getCallbackQueryButtonKey();
-
-        log.info("Message: {}", messageText);
-        log.info("Button: {}", button);
-
-        if ("/start".equals(messageText)) {
-            commandProvider.executeCommand("/start", update);
-            return;
+        if (button != "") {
+            log.info("MessageButton: {}", button);
+            try {
+                commandProvider.executeCommand(button, update);
+            } catch (IllegalArgumentException e) {
+                log.error("Error executing button action: ", e);
+                sendTextMessage("Unknown button action: " + button);
+            }
         }
 
-        if ("chatgpt".equals(button)) {
-            dialogMode = DialogMode.GPT;
-            commandProvider.executeCommand("chatgpt", update);
-            return;
-        }
-
-        // Добавьте обработку других команд...
-
-        if (dialogMode == DialogMode.GPT) {
-            handleGptConversation(update.getMessage().getChatId(), messageText);
-        }
     }
-
-    private void handleGptConversation(Long chatId, String messageText) {
-        sendTypingNotification(chatId);
-
-        String answer = chatGPTService.sendMessage(loadPrompt("main"), messageText);
-
-        sendTextMessage(answer);
-    }
-
-    // Другие необходимые методы...
 }

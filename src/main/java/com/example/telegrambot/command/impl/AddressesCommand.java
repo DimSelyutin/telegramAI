@@ -7,9 +7,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import com.example.telegrambot.TelegramBot;
 import com.example.telegrambot.command.Command;
+import java.util.List;
 
 @Component
-public class ChatGptCommand implements Command {
+public class AddressesCommand implements Command {
 
     @Autowired
     @Lazy
@@ -17,6 +18,8 @@ public class ChatGptCommand implements Command {
 
     @Override
     public void execute(Update update) {
-        telegramBot.sendTextButtonsMessage("Задайте ваш вопрос");
+        List<String> buttons = List.of("Назад", "back");
+                String textMenu = telegramBot.loadMessage("addressesMessage");
+                telegramBot.sendTextButtonsMessage(textMenu, buttons);
     }
 }

@@ -9,7 +9,7 @@ import com.example.telegrambot.TelegramBot;
 import com.example.telegrambot.command.Command;
 
 @Component
-public class ChatGptCommand implements Command {
+public class ScheduleCommand implements Command {
 
     @Autowired
     @Lazy
@@ -17,6 +17,7 @@ public class ChatGptCommand implements Command {
 
     @Override
     public void execute(Update update) {
-        telegramBot.sendTextButtonsMessage("Задайте ваш вопрос");
+        String textMenu = telegramBot.loadMessage("scheduleMessage");
+        telegramBot.sendTextButtonsMessage(textMenu);
     }
 }
