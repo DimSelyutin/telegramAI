@@ -1,5 +1,6 @@
 package com.example.telegrambot.service;
 
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.ActionType;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -10,7 +11,6 @@ import org.telegram.telegrambots.meta.api.methods.commands.GetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.menubutton.SetChatMenuButton;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
-// import org.telegram.telegrambots.meta.api.methods.reactions.SetMessageReaction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
