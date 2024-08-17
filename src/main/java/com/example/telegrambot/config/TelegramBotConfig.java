@@ -29,6 +29,7 @@ public class TelegramBotConfig {
         log.info("Start config telegram bot {}", telegramBotName);
         return new TelegramBot(telegramBotName, telegramBotToken);
     }
+
     @Bean
     public TelegramBotsApi telegramBotsApi() throws Exception {
         return new TelegramBotsApi(DefaultBotSession.class);

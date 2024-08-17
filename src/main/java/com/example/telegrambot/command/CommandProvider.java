@@ -1,10 +1,11 @@
 package com.example.telegrambot.command;
 
 import com.example.telegrambot.command.impl.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import com.example.telegrambot.context.ChatContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashMap;
@@ -17,14 +18,14 @@ public class CommandProvider {
 
     @Autowired
     public CommandProvider(StartCommand startCommand,
-                           AboutBotCommand aboutBotCommand,
-                           ChatGptCommand chatGptCommand,
-                           AboutStudioCommand aboutStudioCommand,
-                           ProfileCommand profileCommand,
-                           ScheduleCommand scheduleCommand,
-                           TrainersCommand trainersCommand,
-                           AddressesCommand addressesCommand,
-                           BackToMainMenuCommand backToMainMenuCommand) {
+            AboutBotCommand aboutBotCommand,
+            @Lazy ChatGptCommand chatGptCommand,
+            AboutStudioCommand aboutStudioCommand,
+            ProfileCommand profileCommand,
+            ScheduleCommand scheduleCommand,
+            TrainersCommand trainersCommand,
+            AddressesCommand addressesCommand,
+            BackToMainMenuCommand backToMainMenuCommand) {
         commandMap.put("/start", startCommand);
         commandMap.put("about_bot", aboutBotCommand);
         commandMap.put("chatgpt", chatGptCommand);
@@ -37,13 +38,22 @@ public class CommandProvider {
         // Добавьте другие команды сюда при необходимости.
     }
 
-    public void executeCommand(String commandName, Update update) {
+    public void executeCommand(String commandName, Update update, ChatContext context) {
         Command command = commandMap.get(commandName);
         if (command != null) {
-            command.execute(update);
+            command.execute(update, context);
+            
         } else {
             // Обработка неизвестной команды.
             throw new IllegalArgumentException("Unknown command: " + commandName);
+        }
+    }
+
+    public void processMessage(Update update, ChatContext context) {
+        for (Command command : commandMap.values()) {
+            if (command instanceof ChatGptCommand) {
+                command.processMessage(update, context);
+            }
         }
     }
 }
