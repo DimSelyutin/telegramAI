@@ -1,79 +1,53 @@
 package com.example.telegrambot;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import com.example.telegrambot.command.CommandProvider;
 import com.example.telegrambot.constant.DialogMode;
-import com.example.telegrambot.entity.TelegramUser;
 import com.example.telegrambot.service.ChatGPTService;
 import com.example.telegrambot.service.MultiSessionTelegramBot;
-import java.util.*;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class TelegramBot extends MultiSessionTelegramBot {
+
     @Autowired
-    private ChatGPTService chatGPTService;
+    private CommandProvider commandProvider;
 
-    private DialogMode dialogMode = DialogMode.MAIN;
-
+    @Autowired
     public TelegramBot(String name, String token) {
         super(name, token);
     }
 
     @Override
     public void onUpdateEventReceived(Update update) {
-        Long chatId = getCurrentChatId();
         String messageText = getMessageText();
-        String button = getCallbackQueryButtonKey();
-        log.info(messageText);
-        if (messageText.equals("/start")) {
-            dialogMode = DialogMode.MAIN;
-            List<String> buttons = new ArrayList<>();
-            buttons.add("О боте");
-            buttons.add("about_bot");
-            buttons.add("ChatGPT");
-            buttons.add("chatgpt");
-            buttons.add("О студии");
-            buttons.add("about_studio");
-            buttons.add("О вас");
-            buttons.add("profile");
-            // ф-я считывания из файла
-            String textMenu = loadMessage("mainMessage");
-            sendTextButtonsMessage(textMenu, buttons);
 
-            return;
-        }
-        if (messageText.equals("/gpt")) {
-            dialogMode = DialogMode.GPT;
-
-            sendTextButtonsMessage("Задайте ваш вопрос");
-            return;
-        }
-        if (dialogMode == dialogMode.MAIN || button.equals("chatgpt")) {
-            if (button.equals("profile")) {
-                Long userId = getUserId();
-                String firstname = getUserFirstName();
-                String lastname = getUserLastName();
-                String phone = getUserPhone();
-                TelegramUser tgUser = new TelegramUser();
-                tgUser.setFirstName(firstname);
-                tgUser.setId(userId);
-                tgUser.setLastName(lastname);
-                tgUser.setPhone(phone);
-                log.info("User:", tgUser.toString());
-                sendTextMessage("Здравствуйте " + firstname);
-                return;
+        if (messageText != "") {
+            log.info("Message: {}", messageText);
+            try {
+                commandProvider.executeCommand(messageText, update);
+            } catch (IllegalArgumentException e) {
+                log.error("Error executing command: ", e);
+                sendTextMessage("Unknown command: " + messageText);
             }
         }
 
-        if (dialogMode == dialogMode.GPT) {
-            sendTypingNotification(chatId);
-            log.info("messages: {}", chatGPTService.getMessageHistory());
-            String answer = chatGPTService.sendMessage(loadPrompt("main"), messageText);
-
-            sendTextMessage(answer);
+        // Также обработайте кнопки из callbackQuery.
+        String button = getCallbackQueryButtonKey();
+        if (button != "") {
+            log.info("MessageButton: {}", button);
+            try {
+                commandProvider.executeCommand(button, update);
+            } catch (IllegalArgumentException e) {
+                log.error("Error executing button action: ", e);
+                sendTextMessage("Unknown button action: " + button);
+            }
         }
 
     }

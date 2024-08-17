@@ -5,6 +5,8 @@ import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.ChatCompletionResponse;
 import com.plexpt.chatgpt.entity.chat.Message;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jvnet.hk2.annotations.Service;
-
+@Slf4j
 @Service
 public class ChatGPTService {
 
@@ -29,6 +31,7 @@ public class ChatGPTService {
         if (token.startsWith("gpt:")) {
             token = "sk-proj-" + new StringBuilder(token.substring(4)).reverse();
         }
+        log.info(token);
 
         this.chatGPT = ChatGPT.builder()
                 .apiKey(token)
@@ -80,9 +83,9 @@ public class ChatGPTService {
      */
     private String sendMessagesToChatGPT() {
         ChatCompletion chatCompletion = ChatCompletion.builder()
-                .model(ChatCompletion.Model.GPT4Turbo.getName()) // GPT4Turbo or GPT_3_5_TURBO
+                .model(ChatCompletion.Model.GPT_3_5_TURBO.getName()) // GPT4Turbo or GPT_3_5_TURBO
                 .messages(messageHistory)
-                .maxTokens(3000)
+                .maxTokens(256)
                 .temperature(0.9)
                 .build();
 
