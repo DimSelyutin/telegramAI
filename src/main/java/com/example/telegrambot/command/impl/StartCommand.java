@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import com.example.telegrambot.TelegramBot;
 import com.example.telegrambot.command.Command;
 import com.example.telegrambot.constant.DialogMode;
+import com.example.telegrambot.context.ChatContext;
 import com.example.telegrambot.service.MultiSessionTelegramBot;
 
 import java.util.List;
@@ -22,7 +23,8 @@ public class StartCommand implements Command {
 
     @Override
 
-    public void execute(Update update) {
+        public void execute(Update update, ChatContext context) {
+
         // Логика для команды /start
         String textMenu = telegramBot.loadMessage("mainMessage");
         List<String> buttons = Arrays.asList(
@@ -31,6 +33,12 @@ public class StartCommand implements Command {
                 "О студии", "about_studio",
                 "О вас", "profile");
         telegramBot.sendTextButtonsMessage(textMenu, buttons);
+    }
+
+    @Override
+    public void processMessage(Update update, ChatContext context) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'processMessage'");
     }
 
 }

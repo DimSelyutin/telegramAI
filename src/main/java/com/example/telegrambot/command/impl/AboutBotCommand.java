@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.example.telegrambot.TelegramBot;
 import com.example.telegrambot.command.Command;
+import com.example.telegrambot.context.ChatContext;
 
 @Component
 public class AboutBotCommand implements Command {
@@ -17,10 +18,15 @@ public class AboutBotCommand implements Command {
     private TelegramBot telegramBot;
 
     @Override
-    public void execute(Update update) {
+    public void execute(Update update, ChatContext context) {
         List<String> buttons = List.of("Назад", "back_to_main_menu");
         String textMenu = telegramBot.loadMessage("aboutBotMessage");
         telegramBot.sendTextButtonsMessage(textMenu, buttons);
 
+    }
+    @Override
+    public void processMessage(Update update, ChatContext context) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'processMessage'");
     }
 }
